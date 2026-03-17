@@ -1,79 +1,31 @@
 const images = document.querySelectorAll(".gallery img");
-const lightbox = document.getElementById("lightbox");
-const lightboxImg = document.getElementById("lightbox-img");
-const closeBtn = document.getElementById("close");
-const nextBtn = document.getElementById("next");
-const prevBtn = document.getElementById("prev");
-
-let currentIndex = 0;
-
-images.forEach((img, index) => {
-    img.addEventListener("click", () => {
-        lightbox.style.display = "flex";
-        lightboxImg.src = img.src;
-        currentIndex = index;
-    });
-});
-
-closeBtn.addEventListener("click", () => {
-    lightbox.style.display = "none";
-});
-
-nextBtn.addEventListener("click", () => {
-    currentIndex++;
-    if(currentIndex >= images.length){
-        currentIndex = 0;
-    }
-    lightboxImg.src = images[currentIndex].src;
-});
-
-prevBtn.addEventListener("click", () => {
-    currentIndex--;
-    if(currentIndex < 0){
-        currentIndex = images.length - 1;
-    }
-    lightboxImg.src = images[currentIndex].src;
-});const uploadInput = document.getElementById("upload");
-const gallery = document.querySelector(".gallery");
-
-uploadInput.addEventListener("change", function(){
-
-const file = this.files[0];
-
-if(file){
-
-const reader = new FileReader();
-
-reader.onload = function(e){
-
-const img = document.createElement("img");
-img.src = e.target.result;
-
-gallery.appendChild(img);
-
-}
-
-reader.readAsDataURL(file);
-
-}
-
-});const searchInput = document.getElementById("search");
-
-searchInput.addEventListener("keyup", function(){
-
-const filter = this.value.toLowerCase();
-const images = document.querySelectorAll(".gallery img");
 
 images.forEach(img => {
+  img.addEventListener("click", () => {
+    const viewer = document.createElement("div");
+    viewer.style.position = "fixed";
+    viewer.style.top = "0";
+    viewer.style.left = "0";
+    viewer.style.width = "100%";
+    viewer.style.height = "100%";
+    viewer.style.background = "rgba(0,0,0,0.9)";
+    viewer.style.display = "flex";
+    viewer.style.alignItems = "center";
+    viewer.style.justifyContent = "center";
+    viewer.style.zIndex = "1000";
 
-const name = img.alt ? img.alt.toLowerCase() : "";
+    const bigImg = document.createElement("img");
+    bigImg.src = img.src;
+    bigImg.style.maxWidth = "90%";
+    bigImg.style.maxHeight = "90%";
+    bigImg.style.borderRadius = "10px";
 
-if(name.includes(filter)){
-img.style.display = "block";
-}else{
-img.style.display = "none";
-}
+    viewer.appendChild(bigImg);
 
-});
+    viewer.addEventListener("click", () => {
+      viewer.remove();
+    });
 
+    document.body.appendChild(viewer);
+  });
 });
